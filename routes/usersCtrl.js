@@ -129,24 +129,28 @@ module.exports = {
     let headerAuth = request.headers["authorization"];
 
     let userId = jwtUtils.getUserId(headerAuth);
-
+    // unn ID est toujours >0 on verifie que tout est ok
     if (userId < 0) {
       return response
         .status(400)
         .json({ error: "An error occured mauvais token" });
     }
-
+    // on cherche un user selon les attributs mentionné dans attributes
     models.User.findOne({
       attributes: ["id", "nom", "prenom", "email"],
+      // et on tcheck si son ID est ok
       where: { id: userId },
     })
+    // si c'est le cas on renvoi un message de succes
       .then((user) => {
         if (user) {
           return response.status(201).json(user);
+          // sinon on renvoi un message d'erreur
         } else {
           return response.status(400).json({ error: "AN error occured" });
         }
       })
+      // si aucun user est trouvé on renvoi un autre message d'erreur
       .catch((err) => {
         return response.status(500).json({ error: "user not fetch" });
       });
@@ -213,10 +217,6 @@ module.exports = {
 
     let userId = jwtUtils.getUserId(headerAuth)
 
-    let nom = request.body.nom;
-    let prenom = request.body.prenom;
-    let email = request.body.email;
-
     asyncLib.waterfall([
       (done) => {
           models.User.destroy({
@@ -240,16 +240,20 @@ module.exports = {
     
   }, // DELETE PROFIL OK.
 
-
+  // on cree une fonction GET ALL USERS
   getAllUsers: (requqest, response) => {
+
+    //on recherche tt les users via leur attributs mentionné dans "attributes"
     models.User.findAll({
         attributes: [ 'id', 'nom', 'prenom', 'email']
     })
+    // une fois trouvé on renvoi un message de succes
     .then((usersFound) => {
         response.status(200).json(usersFound)
     })
+    // si erreur on renvoi un message d'erreur
     .catch((err) => {
         response.status(400).json({ 'error': 'An error occurred' });
     });
-},
+},// GET ALL USERS OK.
 }; //-- exxports end ---
