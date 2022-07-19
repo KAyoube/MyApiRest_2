@@ -26,6 +26,6 @@ server.use('/api/',apiRouter)
 // PORT du localhost
 
 server.listen(8092,()=>{
-    console.log('Serveur en marche maitre(8080)');
+    console.log('Serveur en marche maitre(8092)');
 })
 

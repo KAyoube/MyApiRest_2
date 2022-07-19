@@ -155,7 +155,7 @@ module.exports = {
         return response.status(500).json({ error: "user not fetch" });
       });
   }, // READ PROFIL OK.
-
+  
   // on cree une FONCTION UPDATE PROFIL
   updateUserProfil: (request, response) => {
     let headerAuth = request.headers["authorization"];
@@ -256,4 +256,39 @@ module.exports = {
         response.status(400).json({ 'error': 'An error occurred' });
     });
 },// GET ALL USERS OK.
+
+// on cree une FONCTION READ PROFIL by ID
+getUserByid: (request, response) => {
+    
+
+  let userId = request.params.id
+
+  // unn ID est toujours >0 on verifie que tout est ok
+  if (userId < 0) {
+    return response
+      .status(400)
+      .json({ error: "An error occured mauvais token" });
+  }
+  // on cherche un user selon les attributs mentionné dans attributes
+  models.User.findOne({
+    attributes: ["id", "nom", "prenom", "email"],
+    // et on tcheck si son ID est ok
+    where: { id: userId },
+  })
+  // si c'est le cas on renvoi un message de succes
+    .then((user) => {
+      if (user) {
+        return response.status(201).json(user);
+        // sinon on renvoi un message d'erreur
+      } else {
+        return response.status(400).json({ error: "AN error occured" });
+      }
+    })
+    // si aucun user est trouvé on renvoi un autre message d'erreur
+    .catch((err) => {
+      return response.status(500).json({ error: "user not fetch" });
+    });
+}, // READ PROFIL by ID
+
+
 }; //-- exxports end ---

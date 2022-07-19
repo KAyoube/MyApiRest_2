@@ -17,6 +17,7 @@ exports.router = (() => {
     apiRouter.route('/users/me/').put(usersCtrl.updateUserProfil)
     apiRouter.route('/users/delete/').delete(usersCtrl.deleteUserProfil)
     apiRouter.route('/users/all/').get(usersCtrl.getAllUsers)
+    apiRouter.route('/plop/:id/').get(usersCtrl.getUserByid)
 
     return apiRouter;
 })();
